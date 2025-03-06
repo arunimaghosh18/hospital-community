@@ -1,29 +1,23 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Login from "./components/login";
+import Appointments from "./components/appointments";
 
 function App() {
-    const [patients, setPatients] = useState([]);
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/patients")
-            .then(response => {
-                setPatients(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching patients:", error);
-            });
-    }, []);
-
-    return (
-        <div>
-            <h1>Hospital Community</h1>
-            <ul>
-                {patients.map((patient) => (
-                    <li key={patient.id}>{patient.name} (Age: {patient.age})</li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Hospital Community</h1>
+      {user ? (
+        <>
+          <p>Welcome, {user.username} ({user.role})</p>
+          <Appointments user={user} />
+        </>
+      ) : (
+        <Login setUser={setUser} />
+      )}
+    </div>
+  );
 }
 
 export default App;

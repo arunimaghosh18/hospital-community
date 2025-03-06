@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  font-family: 'Arial', sans-serif; /* Added font family */
+  background-color: #f0f0f0; /* Light background color */
+  padding: 20px; /* Added padding */
 }
 
 .App-logo {
@@ -22,10 +25,18 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  border-radius: 10px; /* Added rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow */
 }
 
 .App-link {
   color: #61dafb;
+  text-decoration: none; /* Removed underline */
+  transition: color 0.3s; /* Added transition for hover effect */
+}
+
+.App-link:hover {
+  color: #21a1f1; /* Change color on hover */
 }
 
 @keyframes App-logo-spin {
