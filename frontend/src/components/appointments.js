@@ -1,28 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Appointments({ user }) {
   const [appointments, setAppointments] = useState([]);
 
-  const appointmentStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: '20px',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '10px',
-    backgroundColor: '#fff',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  useEffect(() => {
+    // Load appointments from localStorage on component mount
+    const savedAppointments = JSON.parse(localStorage.getItem("appointments")) || [];
+    setAppointments(savedAppointments);
+  }, []);
+
+  const saveAppointments = (newAppointments) => {
+    setAppointments(newAppointments);
+    localStorage.setItem("appointments", JSON.stringify(newAppointments)); // Persist appointments
   };
 
-
   const addAppointment = () => {
+    if (!user || !user.username || !user.role) {
+      alert("User is not logged in!");
+      return;
+    }
+
     const newAppointment = {
       doctor: user.role === "doctor" ? user.username : "Dr. Smith",
       patient: user.role === "patient" ? user.username : "John Doe",
       date: new Date().toLocaleDateString(),
     };
-    setAppointments([...appointments, newAppointment]);
+
+    const updatedAppointments = [...appointments, newAppointment];
+    saveAppointments(updatedAppointments);
   };
 
   return (
@@ -47,13 +52,15 @@ function Appointments({ user }) {
       </button>
 
       <ul style={{ listStyleType: 'none', padding: 0 }}>
-
-        {appointments.map((appt, index) => (
-          <li key={index} style={{ margin: '10px 0' }}>
-
-            {appt.patient} has an appointment with {appt.doctor} on {appt.date}
-          </li>
-        ))}
+        {appointments.length === 0 ? (
+          <p>No appointments booked yet.</p>
+        ) : (
+          appointments.map((appt, index) => (
+            <li key={index} style={{ margin: '10px 0' }}>
+              {appt.patient} has an appointment with {appt.doctor} on {appt.date}
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
